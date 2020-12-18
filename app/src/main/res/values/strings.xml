@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SuperApp</string>
+    <string name="placeholder">superhero</string>
 </resources>
