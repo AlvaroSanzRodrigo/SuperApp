@@ -7,6 +7,6 @@ import retrofit2.http.Url
 
 interface Service {
     @GET
-    fun getCharacters(@Query("ts") ts: String, @Query("apikey") apiKey: String, @Query("Hash") hash: String): Call<CharacterResponse>
+    fun getCharacters(@Url url:String, @Query("nameStartsWith") search: String?, @Query("ts") ts: String, @Query("apikey") apiKey: String, @Query("hash") hash: String): Call<CharacterResponse>
 
 }
