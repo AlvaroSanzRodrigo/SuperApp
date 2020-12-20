@@ -7,7 +7,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
-class RetroFitRepository(){
+class RetroFitRepository{
+
+    private val mutableList = mutableListOf<Character>()
+
+
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl("http://gateway.marvel.com/v1/public/characters")
@@ -15,10 +19,12 @@ class RetroFitRepository(){
             .build()
     }
 
-    fun getCharacters(){
-        var timeStamp = System.currentTimeMillis().toString()
-        getRetrofit().create(Service::class.java).getCharacters(timeStamp, Auth.PUBLIC_KEY, Auth.getHash(timeStamp))
-        MutableLiveData<List<Character>>(mutableList) as LiveData<List<Character>>
+    fun getCharacters(): LiveData<List<Character>>{
+        val timeStamp = System.currentTimeMillis().toString()
+        val call = getRetrofit().create(Service::class.java).getCharacters(timeStamp, Auth.PUBLIC_KEY, Auth.getHash(timeStamp)).execute()
+        val result = call.body() as CharacterResponse
+        mutableList.addAll(result.results)
+        return MutableLiveData<List<Character>>(mutableList) as LiveData<List<Character>>
     }
 
 

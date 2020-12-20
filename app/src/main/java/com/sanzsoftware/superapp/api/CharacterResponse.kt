@@ -5,6 +5,6 @@ import com.sanzsoftware.superapp.models.Character
 
 data class CharacterResponse(
     @SerializedName("status") var status: String,
-    @SerializedName("results") var resuts: List<Character>
+    @SerializedName("results") var results: List<Character>
 ) {
 }
