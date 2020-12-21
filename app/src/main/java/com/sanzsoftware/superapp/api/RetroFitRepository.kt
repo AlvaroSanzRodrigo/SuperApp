@@ -3,6 +3,7 @@ package com.sanzsoftware.superapp.api
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.sanzsoftware.superapp.models.Character
+import kotlinx.coroutines.runBlocking
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -18,11 +19,18 @@ class RetroFitRepository{
             .build()
     }
 
-    fun getCharacters(): LiveData<List<Character>>{
-        val timeStamp = System.currentTimeMillis().toString()
-        val call = getRetrofit().create(Service::class.java).getCharacters("characters", null, timeStamp, Auth.PUBLIC_KEY, Auth.getHash(timeStamp)).execute()
-        val result = call.body() as CharacterResponse
-        mutableList.addAll(result.data.results)
+     fun getCharacters(): LiveData<List<Character>>{
+         runBlocking {
+             val timeStamp = System.currentTimeMillis().toString()
+             val call = getRetrofit().create(Service::class.java).getCharacters("characters", null, timeStamp, Auth.PUBLIC_KEY, Auth.getHash(timeStamp)).execute()
+             val result = call.body()?.data?.results
+             if (result != null) {
+                 mutableList.addAll(result)
+             }
+         }
+
+
+
         return MutableLiveData<List<Character>>(mutableList) as LiveData<List<Character>>
     }
 
