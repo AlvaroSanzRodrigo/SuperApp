@@ -1,5 +1,7 @@
 package com.sanzsoftware.superapp
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.widget.SearchView
@@ -7,12 +9,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sanzsoftware.superapp.adapters.CharacterAdapter
 import com.sanzsoftware.superapp.api.RetroFitRepository
+import com.sanzsoftware.superapp.fragments.CharacterDialog
 import com.sanzsoftware.superapp.models.Character
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
-class MainActivity : AppCompatActivity(), CharacterAdapter.OnClickedItemListener {
+class MainActivity : AppCompatActivity(), CharacterAdapter.OnClickedItemListener, CharacterDialog.OnDismissDialog {
 
     var items: ArrayList<Character> = ArrayList()
 
@@ -65,9 +68,15 @@ class MainActivity : AppCompatActivity(), CharacterAdapter.OnClickedItemListener
 
     override fun onItemSelected(character: Character) {
         character.name?.let { Log.i("RecyclerView", it) }
+        CharacterDialog(character, this).show(this.supportFragmentManager, "Character")
     }
 
     override fun onLottieSelected(character: Character) {
         character.name?.let { Log.i("lottie", it) }
+    }
+
+    override fun onDismiss(character: Character) {
+        items[items.indexOf(character)] = character
+        superheroesRecyclerView.adapter?.notifyDataSetChanged()
     }
 }

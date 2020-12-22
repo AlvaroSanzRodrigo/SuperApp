@@ -1,6 +1,5 @@
 package com.sanzsoftware.superapp.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import com.sanzsoftware.superapp.models.Character
 import com.sanzsoftware.superapp.transforms.CircleTransform
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_superhero.view.*
-import kotlin.math.log
 
 // Adaptador standar
 class CharacterAdapter(var items: ArrayList<Character>) : RecyclerView.Adapter<CharacterAdapter.MyViewHolder>() {
@@ -41,6 +39,10 @@ class CharacterAdapter(var items: ArrayList<Character>) : RecyclerView.Adapter<C
             mCallBack?.onItemSelected(items[position])
         }
 
+        if (items[position].isFavorite!!){
+            holder.view.likeLottieAnimation.playAnimation()
+        }
+
         holder.view.likeLottieAnimation.setOnClickListener {
             if (items[position].isFavorite!!)
                 it.likeLottieAnimation.apply {
@@ -55,13 +57,12 @@ class CharacterAdapter(var items: ArrayList<Character>) : RecyclerView.Adapter<C
             items[position].isFavorite = !items[position].isFavorite!!
             mCallBack?.onLottieSelected(items[position])
         }
-        var url = items[position].thumbnail?.path + items[position].thumbnail?.extension
         Picasso.get()
             .load(items[position].thumbnail?.path + "."  + items[position].thumbnail?.extension)
             .resize(100, 100)
             .transform(CircleTransform())
             .centerCrop()
-            .into(holder.view.imageView)
+            .into(holder.view.imageViewDialog)
         holder.view.textView_SuperHero_name.text = items[position].name
     }
 
