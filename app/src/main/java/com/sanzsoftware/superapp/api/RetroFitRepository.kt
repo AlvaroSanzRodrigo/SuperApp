@@ -22,6 +22,7 @@ class RetroFitRepository{
         val timeStamp = System.currentTimeMillis().toString()
         val call = getRetrofit().create(Service::class.java).getCharacters(url, search, timeStamp, Auth.PUBLIC_KEY, Auth.getHash(timeStamp)).execute()
         val result = call.body() as CharacterResponse
+        mutableList.clear()
         mutableList.addAll(result.data.results)
         return MutableLiveData<List<Character>>(mutableList) as LiveData<List<Character>>
     }
