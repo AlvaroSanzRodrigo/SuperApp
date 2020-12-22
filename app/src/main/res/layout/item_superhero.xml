@@ -29,7 +29,7 @@
             tools:srcCompat="@drawable/ic_baseline_image_24" />
 
         <TextView
-            android:id="@+id/textView_account_name"
+            android:id="@+id/textView_SuperHero_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -41,15 +41,16 @@
             tools:text="Super hero" />
 
         <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/likeLottieAnimation"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="32dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:lottie_autoPlay="true"
+            app:lottie_autoPlay="false"
             app:lottie_fileName="like.json"
-            app:lottie_loop="true" />
+            app:lottie_loop="false" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
