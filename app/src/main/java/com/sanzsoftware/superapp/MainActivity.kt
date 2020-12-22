@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity(), CharacterAdapter.OnClickedItemListener
         setRecyclerView()
         setSearch()
         search(null)
-
     }
 
     private fun setRecyclerView() {
@@ -33,11 +32,15 @@ class MainActivity : AppCompatActivity(), CharacterAdapter.OnClickedItemListener
     private fun setSearch(){
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                items.clear()
+                superheroesRecyclerView.adapter?.notifyDataSetChanged()
+                search(query)
                 searchView.clearFocus()
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+
                 items.clear()
                 superheroesRecyclerView.adapter?.notifyDataSetChanged()
                 search(newText)
