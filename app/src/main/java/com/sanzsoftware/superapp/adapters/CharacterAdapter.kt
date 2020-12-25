@@ -1,14 +1,18 @@
 package com.sanzsoftware.superapp.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.sanzsoftware.superapp.R
+import com.sanzsoftware.superapp.database.CharacterDatabase
 import com.sanzsoftware.superapp.models.Character
 import com.sanzsoftware.superapp.transforms.CircleTransform
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_superhero.view.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 // Adaptador standar
 class CharacterAdapter(var items: ArrayList<Character>) : RecyclerView.Adapter<CharacterAdapter.MyViewHolder>() {
@@ -30,6 +34,7 @@ class CharacterAdapter(var items: ArrayList<Character>) : RecyclerView.Adapter<C
     }
 
     interface OnClickedItemListener {
+        var context: Context
         fun onItemSelected(character: Character)
         fun onLottieSelected(character: Character)
     }
@@ -38,7 +43,14 @@ class CharacterAdapter(var items: ArrayList<Character>) : RecyclerView.Adapter<C
         holder.itemView.setOnClickListener {
             mCallBack?.onItemSelected(items[position])
         }
-
+        doAsync {
+            val favCharacter = mCallBack?.context?.let { items[position].id?.let { it1 -> CharacterDatabase.getInstance(it).characterDao().isFavorite(it1) } }
+            if (favCharacter != null)
+                uiThread {
+                    holder.view.likeLottieAnimation.playAnimation()
+                    // items[position].isFavorite = !items[position].isFavorite!!
+                }
+        }
         if (items[position].isFavorite!!){
             holder.view.likeLottieAnimation.playAnimation()
         }
@@ -54,8 +66,10 @@ class CharacterAdapter(var items: ArrayList<Character>) : RecyclerView.Adapter<C
                     speed = 1.8f
                     playAnimation()
                 }
-            items[position].isFavorite = !items[position].isFavorite!!
+
             mCallBack?.onLottieSelected(items[position])
+
+            items[position].isFavorite = !items[position].isFavorite!!
         }
         Picasso.get()
             .load(items[position].thumbnail?.path + "."  + items[position].thumbnail?.extension)
