@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'kotlin-android-extensions'
 
 }
 
@@ -66,4 +67,7 @@ dependencies {
     // Anko
     def anko_version = '0.10.8'
     implementation "org.jetbrains.anko:anko-common:$anko_version"
+
+    // Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }
